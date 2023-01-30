@@ -54,18 +54,18 @@ public class PostRepository{
 
   public Post save(Post post) {
     long postExistingID = post.getId();
-      if (postExistingID > 0 && posts.containsKey(postExistingID)) {
-          if (!posts.get(postExistingID).isRemoved()) {
-            posts.replace(postExistingID, post);
-          } else {
-            throw new NotFoundException("Элемент не найден");
-          }
+    if (postExistingID > 0 && posts.containsKey(postExistingID)) {
+      if (!posts.get(postExistingID).isRemoved()) {
+        posts.replace(postExistingID, post);
       } else {
-        long newPostId = postExistingID == 0 ? postID.incrementAndGet() : postExistingID;
-        post.setId(newPostId);
-        posts.put(newPostId, post);
+        throw new NotFoundException("Элемент не найден");
       }
-      return post;
+    } else {
+      long newPostId = postExistingID == 0 ? postID.incrementAndGet() : postExistingID;
+      post.setId(newPostId);
+      posts.put(newPostId, post);
+    }
+    return post;
   }
 
   public Optional<Post> removeById(long id) {
